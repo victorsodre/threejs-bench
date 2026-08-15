@@ -1,0 +1,16 @@
+{
+  "name": "threejs-bench",
+  "terminals": [
+    {
+      "name": "static-server",
+      "command": "python3 -m http.server 8000",
+      "description": "Serves the benchmark HTML files over HTTP at http://localhost:8000/ (e.g. /claude/, /gpt/, /grok/, /grok4.6/). A static server is required because the ES module importmaps in each index.html do not load over file://."
+    }
+  ],
+  "ports": [
+    {
+      "name": "static server",
+      "port": 8000
+    }
+  ]
+}
