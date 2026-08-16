@@ -3,3 +3,5 @@ package-lock.json
 
 # Generated screenshots (regenerated on each run; text results are committed as samples)
 results/**/*.png
+# Transient dry-run payload from judge.mjs --dry-run
+results/**/judge.request.json

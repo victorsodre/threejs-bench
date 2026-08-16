@@ -1,0 +1,53 @@
+{
+  "bench": "bench01",
+  "judge": "agent-reference (Opus vision, illustrative)",
+  "method": "per-image absolute rubric (1-5), independent requests to avoid position bias — reference example; run `node judge.mjs` with an API key to regenerate",
+  "dimensions": ["composition", "lighting", "atmosphere", "texture_richness", "postfx"],
+  "scores": [
+    {
+      "scene": "gpt",
+      "model": "GPT 5.6 Sol",
+      "composition": 4,
+      "lighting": 5,
+      "atmosphere": 5,
+      "texture_richness": 3,
+      "postfx": 4,
+      "overall": 4.2,
+      "notes": "Heavy volumetric fog with a visible sun disc gives outstanding depth and a cinematic mood."
+    },
+    {
+      "scene": "grok4.6",
+      "model": "Grok 4.6",
+      "composition": 3,
+      "lighting": 5,
+      "atmosphere": 3,
+      "texture_richness": 4,
+      "postfx": 5,
+      "overall": 4.0,
+      "notes": "Dramatic low sun with strong bloom and rich plaster/wood textures, but a foreground tree crops the village."
+    },
+    {
+      "scene": "grok",
+      "model": "Grok 4.5",
+      "composition": 3,
+      "lighting": 4,
+      "atmosphere": 3,
+      "texture_richness": 4,
+      "postfx": 4,
+      "overall": 3.6,
+      "notes": "Warm palette, good material relief, reflective water and fireflies, but the camera sits too close for a village read."
+    },
+    {
+      "scene": "claude",
+      "model": "Claude Fable 5",
+      "composition": 4,
+      "lighting": 3,
+      "atmosphere": 3,
+      "texture_richness": 2,
+      "postfx": 3,
+      "overall": 3.0,
+      "notes": "Clean, readable overview and nice horizon silhouette, but flat low-poly materials and pale, low-contrast light."
+    }
+  ],
+  "ranking": ["gpt", "grok4.6", "grok", "claude"]
+}

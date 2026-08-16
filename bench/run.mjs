@@ -19,6 +19,7 @@ import { startServer } from './lib/server.mjs';
 import { resolveChrome } from './lib/chrome.mjs';
 import { instrument, readGlInfo } from './lib/instrument.mjs';
 import { runSourceChecks, runRuntimeChecks } from './lib/checks.mjs';
+import { analyzeScreenshot } from './lib/pixels.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(__dirname, '..');
@@ -74,7 +75,8 @@ const measureScene = async (browser, baseUrl, scene, spec) => {
   const outDir = join(__dirname, 'results', spec.id);
   await mkdir(outDir, { recursive: true });
   const screenshotName = `${scene.folder.replace(/\./g, '_')}.png`;
-  await page.screenshot({ path: join(outDir, screenshotName) });
+  const shotBuf = await page.screenshot({ path: join(outDir, screenshotName) });
+  const pixels = analyzeScreenshot(Buffer.from(shotBuf));
 
   const inPageErrors = [...(b.errors || [])];
   await page.close();
@@ -96,6 +98,7 @@ const measureScene = async (browser, baseUrl, scene, spec) => {
     consoleErrors,
     pageErrors: [...pageErrors, ...inPageErrors],
     screenshot: screenshotName,
+    pixels,
   };
 
   const src = await readFile(join(REPO_ROOT, scene.folder, 'index.html'), 'utf8');

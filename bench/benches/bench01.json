@@ -29,7 +29,9 @@
       "renders_without_error",
       "geometry_present",
       "render_loop_active",
-      "interactive_first_draw"
+      "interactive_first_draw",
+      "warm_lighting",
+      "varied_shading"
     ],
     "manual": [
       "At least 12 half-timbered houses with variation",

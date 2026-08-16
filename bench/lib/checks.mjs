@@ -75,6 +75,22 @@ export const RUNTIME_CHECKS = {
     label: 'First draw under 5s',
     test: (m) => m.timeToFirstDrawMs != null && m.timeToFirstDrawMs < 5000,
   },
+  warm_lighting: {
+    label: 'Warm golden-hour sky (pixel-verified)',
+    test: (m) => !!(m.pixels && m.pixels.warm),
+  },
+  // NOTE: available but not enabled by default in bench01 — a single
+  // software-rendered, fogged frame suppresses bright pixels, so this is an
+  // unreliable gate. The `bloom_postprocessing` source check covers the
+  // requirement; `brightFraction` is still reported in metrics for info.
+  emissive_highlights: {
+    label: 'Emissive highlights / bloom (bright pixels present)',
+    test: (m) => !!(m.pixels && m.pixels.brightFraction > 0.001),
+  },
+  varied_shading: {
+    label: 'Varied shading, not flat color (luma stddev > 25)',
+    test: (m) => !!(m.pixels && m.pixels.lumaStdDev > 25),
+  },
 };
 
 export const runSourceChecks = (ids, src) =>

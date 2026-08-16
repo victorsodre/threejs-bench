@@ -1,26 +1,38 @@
 {
   "bench": "bench01",
   "title": "Medieval village at golden hour",
-  "measuredAt": "2026-08-16T00:19:34.997Z",
+  "measuredAt": "2026-08-16T01:13:43.664Z",
   "glRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
   "scenes": [
     {
       "scene": "claude",
       "model": "Claude Fable 5",
       "generationTime": "5 min",
-      "loadMs": 691,
-      "timeToFirstDrawMs": 820,
+      "loadMs": 618,
+      "timeToFirstDrawMs": 741,
       "renderFps": 0.8,
       "framesMeasured": 5,
-      "drawsFirstHalf": 3062,
-      "drawsSecondHalf": 4593,
-      "drawCallsPerFrame": 1531,
-      "trianglesPerFrame": 189496,
+      "drawsFirstHalf": 3140,
+      "drawsSecondHalf": 4705,
+      "drawCallsPerFrame": 1569,
+      "trianglesPerFrame": 192288,
       "glRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
       "canvas": "1600x900",
       "consoleErrors": [],
       "pageErrors": [],
       "screenshot": "claude.png",
+      "pixels": {
+        "sky": [
+          182,
+          132,
+          137
+        ],
+        "warm": true,
+        "brightFraction": 0.0005,
+        "lumaMean": 88.9,
+        "lumaStdDev": 47.8,
+        "sampled": 90000
+      },
       "threeVersion": "0.170.0",
       "sourceBytes": 34785,
       "sourceChecks": [
@@ -103,6 +115,18 @@
           "label": "First draw under 5s",
           "kind": "runtime",
           "pass": true
+        },
+        {
+          "id": "warm_lighting",
+          "label": "Warm golden-hour sky (pixel-verified)",
+          "kind": "runtime",
+          "pass": true
+        },
+        {
+          "id": "varied_shading",
+          "label": "Varied shading, not flat color (luma stddev > 25)",
+          "kind": "runtime",
+          "pass": true
         }
       ]
     },
@@ -110,19 +134,31 @@
       "scene": "gpt",
       "model": "GPT 5.6 Sol",
       "generationTime": "30 min",
-      "loadMs": 821,
-      "timeToFirstDrawMs": 370,
+      "loadMs": 976,
+      "timeToFirstDrawMs": 440,
       "renderFps": 1,
       "framesMeasured": 6,
-      "drawsFirstHalf": 3797,
-      "drawsSecondHalf": 3812,
-      "drawCallsPerFrame": 1268,
-      "trianglesPerFrame": 181513,
+      "drawsFirstHalf": 3787,
+      "drawsSecondHalf": 3797,
+      "drawCallsPerFrame": 1264,
+      "trianglesPerFrame": 181369,
       "glRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
       "canvas": "1600x900",
       "consoleErrors": [],
       "pageErrors": [],
       "screenshot": "gpt.png",
+      "pixels": {
+        "sky": [
+          167,
+          124,
+          93
+        ],
+        "warm": true,
+        "brightFraction": 0,
+        "lumaMean": 93.3,
+        "lumaStdDev": 46.9,
+        "sampled": 90000
+      },
       "threeVersion": "0.185.1",
       "sourceBytes": 24430,
       "sourceChecks": [
@@ -205,6 +241,18 @@
           "label": "First draw under 5s",
           "kind": "runtime",
           "pass": true
+        },
+        {
+          "id": "warm_lighting",
+          "label": "Warm golden-hour sky (pixel-verified)",
+          "kind": "runtime",
+          "pass": true
+        },
+        {
+          "id": "varied_shading",
+          "label": "Varied shading, not flat color (luma stddev > 25)",
+          "kind": "runtime",
+          "pass": true
         }
       ]
     },
@@ -212,19 +260,31 @@
       "scene": "grok",
       "model": "Grok 4.5",
       "generationTime": "3 min",
-      "loadMs": 10005,
-      "timeToFirstDrawMs": 1214,
+      "loadMs": 8508,
+      "timeToFirstDrawMs": 610,
       "renderFps": 0.7,
       "framesMeasured": 4,
-      "drawsFirstHalf": 7714,
-      "drawsSecondHalf": 7710,
-      "drawCallsPerFrame": 3856,
-      "trianglesPerFrame": 407761,
+      "drawsFirstHalf": 7685,
+      "drawsSecondHalf": 7686,
+      "drawCallsPerFrame": 3843,
+      "trianglesPerFrame": 408123,
       "glRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
       "canvas": "1600x900",
       "consoleErrors": [],
       "pageErrors": [],
       "screenshot": "grok.png",
+      "pixels": {
+        "sky": [
+          216,
+          134,
+          85
+        ],
+        "warm": true,
+        "brightFraction": 0.00147,
+        "lumaMean": 96.7,
+        "lumaStdDev": 65.3,
+        "sampled": 90000
+      },
       "threeVersion": "0.170.0",
       "sourceBytes": 70073,
       "sourceChecks": [
@@ -307,6 +367,18 @@
           "label": "First draw under 5s",
           "kind": "runtime",
           "pass": true
+        },
+        {
+          "id": "warm_lighting",
+          "label": "Warm golden-hour sky (pixel-verified)",
+          "kind": "runtime",
+          "pass": true
+        },
+        {
+          "id": "varied_shading",
+          "label": "Varied shading, not flat color (luma stddev > 25)",
+          "kind": "runtime",
+          "pass": true
         }
       ]
     },
@@ -314,19 +386,31 @@
       "scene": "grok4.6",
       "model": "Grok 4.6",
       "generationTime": "7 min",
-      "loadMs": 11829,
-      "timeToFirstDrawMs": 2148,
-      "renderFps": 0.3,
-      "framesMeasured": 2,
-      "drawsFirstHalf": 3589,
-      "drawsSecondHalf": 3582,
-      "drawCallsPerFrame": 3586,
-      "trianglesPerFrame": 426577,
+      "loadMs": 11701,
+      "timeToFirstDrawMs": 2306,
+      "renderFps": 0.5,
+      "framesMeasured": 3,
+      "drawsFirstHalf": 7185,
+      "drawsSecondHalf": 3605,
+      "drawCallsPerFrame": 3597,
+      "trianglesPerFrame": 427264,
       "glRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
       "canvas": "1600x900",
       "consoleErrors": [],
       "pageErrors": [],
       "screenshot": "grok4_6.png",
+      "pixels": {
+        "sky": [
+          224,
+          166,
+          137
+        ],
+        "warm": true,
+        "brightFraction": 0.04331,
+        "lumaMean": 82.3,
+        "lumaStdDev": 74.7,
+        "sampled": 90000
+      },
       "threeVersion": "0.170.0",
       "sourceBytes": 56289,
       "sourceChecks": [
@@ -407,6 +491,18 @@
         {
           "id": "interactive_first_draw",
           "label": "First draw under 5s",
+          "kind": "runtime",
+          "pass": true
+        },
+        {
+          "id": "warm_lighting",
+          "label": "Warm golden-hour sky (pixel-verified)",
+          "kind": "runtime",
+          "pass": true
+        },
+        {
+          "id": "varied_shading",
+          "label": "Varied shading, not flat color (luma stddev > 25)",
           "kind": "runtime",
           "pass": true
         }

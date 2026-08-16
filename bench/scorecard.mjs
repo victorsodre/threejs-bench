@@ -12,6 +12,7 @@
 //
 // Usage: node scorecard.mjs [--bench bench01]
 import { readFile, writeFile } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -137,6 +138,25 @@ const main = async () => {
     L.push(`| ${label} | ${kind} | ${cells.join(' | ')} |`);
   }
   L.push('');
+
+  // Visual quality (optional VLM judge)
+  const judgedPath = join(dir, 'judged.json');
+  if (existsSync(judgedPath)) {
+    const judged = JSON.parse(await readFile(judgedPath, 'utf8'));
+    const dims = judged.dimensions;
+    L.push('## Visual quality — VLM judge');
+    L.push('');
+    L.push(`_Judge: \`${judged.judge}\` · ${judged.method}_`);
+    L.push('');
+    L.push(`| Scene | ${dims.map((d) => d.replace(/_/g, ' ')).join(' | ')} | Overall | Notes |`);
+    L.push(`| --- | ${dims.map(() => '---').join(' | ')} | --- | --- |`);
+    for (const s of [...judged.scores].sort((a, b) => b.overall - a.overall)) {
+      L.push(`| \`${s.scene}\` | ${dims.map((d) => s[d]).join(' | ')} | **${s.overall}** | ${s.notes || ''} |`);
+    }
+    L.push('');
+    L.push(`Ranking by visual quality: ${judged.ranking.map((r) => `\`${r}\``).join(' > ')}.`);
+    L.push('');
+  }
 
   // Manual checklist
   L.push('## Manual review checklist (not auto-scored)');
