@@ -1,0 +1,683 @@
+{
+  "bench": "bench01",
+  "title": "Medieval village at golden hour",
+  "measuredAt": "2026-08-16T01:13:43.664Z",
+  "glRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+  "weights": {
+    "requirements": 0.5,
+    "performance": 0.3,
+    "correctness": 0.2
+  },
+  "budgets": {
+    "draw": {
+      "best": 500,
+      "worst": 5000
+    },
+    "load": {
+      "best": 2000,
+      "worst": 12000
+    }
+  },
+  "compositeNote": "Composite = requirements 50% · performance 30% · correctness 20%. Performance is graded against fixed budgets (draw calls, load time). FPS is not scored.",
+  "fpsNote": "Software-rendered in headless CI; relative only, not target-hardware FPS.",
+  "scenes": [
+    {
+      "folder": "claude",
+      "model": "Claude Fable 5",
+      "generationTime": "5 min",
+      "live": "../claude/"
+    },
+    {
+      "folder": "gpt",
+      "model": "GPT 5.6 Sol",
+      "generationTime": "30 min",
+      "live": "../gpt/"
+    },
+    {
+      "folder": "grok",
+      "model": "Grok 4.5",
+      "generationTime": "3 min",
+      "live": "../grok/"
+    },
+    {
+      "folder": "grok4.6",
+      "model": "Grok 4.6",
+      "generationTime": "7 min",
+      "live": "../grok4.6/"
+    }
+  ],
+  "manual": [
+    "At least 12 half-timbered houses with variation",
+    "Church with tower",
+    "Windmill with turning blades",
+    "Central well in a stone plaza",
+    "Market stalls with goods",
+    "Reflective, animated water",
+    "Villagers walking, smoke, birds, fireflies, moving clouds",
+    "Cohesive art direction and horizon silhouette"
+  ],
+  "scored": [
+    {
+      "scene": "gpt",
+      "model": "GPT 5.6 Sol",
+      "passed": 15,
+      "total": 15,
+      "requirements": 100,
+      "drawScore": 83,
+      "loadScore": 100,
+      "performance": 92,
+      "correctness": 100,
+      "composite": 97,
+      "grade": "A"
+    },
+    {
+      "scene": "claude",
+      "model": "Claude Fable 5",
+      "passed": 15,
+      "total": 15,
+      "requirements": 100,
+      "drawScore": 76,
+      "loadScore": 100,
+      "performance": 88,
+      "correctness": 100,
+      "composite": 96,
+      "grade": "A"
+    },
+    {
+      "scene": "grok",
+      "model": "Grok 4.5",
+      "passed": 15,
+      "total": 15,
+      "requirements": 100,
+      "drawScore": 26,
+      "loadScore": 35,
+      "performance": 31,
+      "correctness": 100,
+      "composite": 79,
+      "grade": "B"
+    },
+    {
+      "scene": "grok4.6",
+      "model": "Grok 4.6",
+      "passed": 15,
+      "total": 15,
+      "requirements": 100,
+      "drawScore": 31,
+      "loadScore": 3,
+      "performance": 17,
+      "correctness": 100,
+      "composite": 75,
+      "grade": "B"
+    }
+  ],
+  "metrics": [
+    {
+      "scene": "claude",
+      "model": "Claude Fable 5",
+      "generationTime": "5 min",
+      "loadMs": 618,
+      "timeToFirstDrawMs": 741,
+      "renderFps": 0.8,
+      "framesMeasured": 5,
+      "drawsFirstHalf": 3140,
+      "drawsSecondHalf": 4705,
+      "drawCallsPerFrame": 1569,
+      "trianglesPerFrame": 192288,
+      "glRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "canvas": "1600x900",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "claude.png",
+      "pixels": {
+        "sky": [
+          182,
+          132,
+          137
+        ],
+        "warm": true,
+        "brightFraction": 0.0005,
+        "lumaMean": 88.9,
+        "lumaStdDev": 47.8,
+        "sampled": 90000
+      },
+      "threeVersion": "0.170.0",
+      "sourceBytes": 34785,
+      "sourceChecks": [
+        {
+          "id": "no_downloaded_assets",
+          "label": "No downloaded 3D/texture assets",
+          "kind": "source",
+          "pass": true
+        },
+        {
+          "id": "procedural_textures",
+          "label": "Procedural textures (canvas/shader)",
+          "kind": "source",
+          "pass": true
+        },
+        {
+          "id": "shadows_enabled",
+          "label": "Shadows enabled",
+          "kind": "source",
+          "pass": true
+        },
+        {
+          "id": "high_res_shadows",
+          "label": "High-resolution shadow maps (>=2048)",
+          "kind": "source",
+          "pass": true
+        },
+        {
+          "id": "atmospheric_fog",
+          "label": "Atmospheric fog",
+          "kind": "source",
+          "pass": true
+        },
+        {
+          "id": "cinematic_tone_mapping",
+          "label": "Cinematic tone mapping",
+          "kind": "source",
+          "pass": true
+        },
+        {
+          "id": "bloom_postprocessing",
+          "label": "Bloom / post-processing",
+          "kind": "source",
+          "pass": true
+        },
+        {
+          "id": "instanced_geometry",
+          "label": "Instanced geometry",
+          "kind": "source",
+          "pass": true
+        },
+        {
+          "id": "orbit_controls",
+          "label": "Orbital camera controls",
+          "kind": "source",
+          "pass": true
+        }
+      ],
+      "runtimeChecks": [
+        {
+          "id": "renders_without_error",
+          "label": "Renders with no runtime errors",
+          "kind": "runtime",
+          "pass": true
+        },
+        {
+          "id": "geometry_present",
+          "label": "Substantial geometry (>10k triangles/frame)",
+          "kind": "runtime",
+          "pass": true
+        },
+        {
+          "id": "render_loop_active",
+          "label": "Continuous render loop (draws in both halves of window)",
+          "kind": "runtime",
+          "pass": true
+        },
+        {
+          "id": "interactive_first_draw",
+          "label": "First draw under 5s",
+          "kind": "runtime",
+          "pass": true
+        },
+        {
+          "id": "warm_lighting",
+          "label": "Warm golden-hour sky (pixel-verified)",
+          "kind": "runtime",
+          "pass": true
+        },
+        {
+          "id": "varied_shading",
+          "label": "Varied shading, not flat color (luma stddev > 25)",
+          "kind": "runtime",
+          "pass": true
+        }
+      ]
+    },
+    {
+      "scene": "gpt",
+      "model": "GPT 5.6 Sol",
+      "generationTime": "30 min",
+      "loadMs": 976,
+      "timeToFirstDrawMs": 440,
+      "renderFps": 1,
+      "framesMeasured": 6,
+      "drawsFirstHalf": 3787,
+      "drawsSecondHalf": 3797,
+      "drawCallsPerFrame": 1264,
+      "trianglesPerFrame": 181369,
+      "glRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "canvas": "1600x900",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "gpt.png",
+      "pixels": {
+        "sky": [
+          167,
+          124,
+          93
+        ],
+        "warm": true,
+        "brightFraction": 0,
+        "lumaMean": 93.3,
+        "lumaStdDev": 46.9,
+        "sampled": 90000
+      },
+      "threeVersion": "0.185.1",
+      "sourceBytes": 24430,
+      "sourceChecks": [
+        {
+          "id": "no_downloaded_assets",
+          "label": "No downloaded 3D/texture assets",
+          "kind": "source",
+          "pass": true
+        },
+        {
+          "id": "procedural_textures",
+          "label": "Procedural textures (canvas/shader)",
+          "kind": "source",
+          "pass": true
+        },
+        {
+          "id": "shadows_enabled",
+          "label": "Shadows enabled",
+          "kind": "source",
+          "pass": true
+        },
+        {
+          "id": "high_res_shadows",
+          "label": "High-resolution shadow maps (>=2048)",
+          "kind": "source",
+          "pass": true
+        },
+        {
+          "id": "atmospheric_fog",
+          "label": "Atmospheric fog",
+          "kind": "source",
+          "pass": true
+        },
+        {
+          "id": "cinematic_tone_mapping",
+          "label": "Cinematic tone mapping",
+          "kind": "source",
+          "pass": true
+        },
+        {
+          "id": "bloom_postprocessing",
+          "label": "Bloom / post-processing",
+          "kind": "source",
+          "pass": true
+        },
+        {
+          "id": "instanced_geometry",
+          "label": "Instanced geometry",
+          "kind": "source",
+          "pass": true
+        },
+        {
+          "id": "orbit_controls",
+          "label": "Orbital camera controls",
+          "kind": "source",
+          "pass": true
+        }
+      ],
+      "runtimeChecks": [
+        {
+          "id": "renders_without_error",
+          "label": "Renders with no runtime errors",
+          "kind": "runtime",
+          "pass": true
+        },
+        {
+          "id": "geometry_present",
+          "label": "Substantial geometry (>10k triangles/frame)",
+          "kind": "runtime",
+          "pass": true
+        },
+        {
+          "id": "render_loop_active",
+          "label": "Continuous render loop (draws in both halves of window)",
+          "kind": "runtime",
+          "pass": true
+        },
+        {
+          "id": "interactive_first_draw",
+          "label": "First draw under 5s",
+          "kind": "runtime",
+          "pass": true
+        },
+        {
+          "id": "warm_lighting",
+          "label": "Warm golden-hour sky (pixel-verified)",
+          "kind": "runtime",
+          "pass": true
+        },
+        {
+          "id": "varied_shading",
+          "label": "Varied shading, not flat color (luma stddev > 25)",
+          "kind": "runtime",
+          "pass": true
+        }
+      ]
+    },
+    {
+      "scene": "grok",
+      "model": "Grok 4.5",
+      "generationTime": "3 min",
+      "loadMs": 8508,
+      "timeToFirstDrawMs": 610,
+      "renderFps": 0.7,
+      "framesMeasured": 4,
+      "drawsFirstHalf": 7685,
+      "drawsSecondHalf": 7686,
+      "drawCallsPerFrame": 3843,
+      "trianglesPerFrame": 408123,
+      "glRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "canvas": "1600x900",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "grok.png",
+      "pixels": {
+        "sky": [
+          216,
+          134,
+          85
+        ],
+        "warm": true,
+        "brightFraction": 0.00147,
+        "lumaMean": 96.7,
+        "lumaStdDev": 65.3,
+        "sampled": 90000
+      },
+      "threeVersion": "0.170.0",
+      "sourceBytes": 70073,
+      "sourceChecks": [
+        {
+          "id": "no_downloaded_assets",
+          "label": "No downloaded 3D/texture assets",
+          "kind": "source",
+          "pass": true
+        },
+        {
+          "id": "procedural_textures",
+          "label": "Procedural textures (canvas/shader)",
+          "kind": "source",
+          "pass": true
+        },
+        {
+          "id": "shadows_enabled",
+          "label": "Shadows enabled",
+          "kind": "source",
+          "pass": true
+        },
+        {
+          "id": "high_res_shadows",
+          "label": "High-resolution shadow maps (>=2048)",
+          "kind": "source",
+          "pass": true
+        },
+        {
+          "id": "atmospheric_fog",
+          "label": "Atmospheric fog",
+          "kind": "source",
+          "pass": true
+        },
+        {
+          "id": "cinematic_tone_mapping",
+          "label": "Cinematic tone mapping",
+          "kind": "source",
+          "pass": true
+        },
+        {
+          "id": "bloom_postprocessing",
+          "label": "Bloom / post-processing",
+          "kind": "source",
+          "pass": true
+        },
+        {
+          "id": "instanced_geometry",
+          "label": "Instanced geometry",
+          "kind": "source",
+          "pass": true
+        },
+        {
+          "id": "orbit_controls",
+          "label": "Orbital camera controls",
+          "kind": "source",
+          "pass": true
+        }
+      ],
+      "runtimeChecks": [
+        {
+          "id": "renders_without_error",
+          "label": "Renders with no runtime errors",
+          "kind": "runtime",
+          "pass": true
+        },
+        {
+          "id": "geometry_present",
+          "label": "Substantial geometry (>10k triangles/frame)",
+          "kind": "runtime",
+          "pass": true
+        },
+        {
+          "id": "render_loop_active",
+          "label": "Continuous render loop (draws in both halves of window)",
+          "kind": "runtime",
+          "pass": true
+        },
+        {
+          "id": "interactive_first_draw",
+          "label": "First draw under 5s",
+          "kind": "runtime",
+          "pass": true
+        },
+        {
+          "id": "warm_lighting",
+          "label": "Warm golden-hour sky (pixel-verified)",
+          "kind": "runtime",
+          "pass": true
+        },
+        {
+          "id": "varied_shading",
+          "label": "Varied shading, not flat color (luma stddev > 25)",
+          "kind": "runtime",
+          "pass": true
+        }
+      ]
+    },
+    {
+      "scene": "grok4.6",
+      "model": "Grok 4.6",
+      "generationTime": "7 min",
+      "loadMs": 11701,
+      "timeToFirstDrawMs": 2306,
+      "renderFps": 0.5,
+      "framesMeasured": 3,
+      "drawsFirstHalf": 7185,
+      "drawsSecondHalf": 3605,
+      "drawCallsPerFrame": 3597,
+      "trianglesPerFrame": 427264,
+      "glRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "canvas": "1600x900",
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "grok4_6.png",
+      "pixels": {
+        "sky": [
+          224,
+          166,
+          137
+        ],
+        "warm": true,
+        "brightFraction": 0.04331,
+        "lumaMean": 82.3,
+        "lumaStdDev": 74.7,
+        "sampled": 90000
+      },
+      "threeVersion": "0.170.0",
+      "sourceBytes": 56289,
+      "sourceChecks": [
+        {
+          "id": "no_downloaded_assets",
+          "label": "No downloaded 3D/texture assets",
+          "kind": "source",
+          "pass": true
+        },
+        {
+          "id": "procedural_textures",
+          "label": "Procedural textures (canvas/shader)",
+          "kind": "source",
+          "pass": true
+        },
+        {
+          "id": "shadows_enabled",
+          "label": "Shadows enabled",
+          "kind": "source",
+          "pass": true
+        },
+        {
+          "id": "high_res_shadows",
+          "label": "High-resolution shadow maps (>=2048)",
+          "kind": "source",
+          "pass": true
+        },
+        {
+          "id": "atmospheric_fog",
+          "label": "Atmospheric fog",
+          "kind": "source",
+          "pass": true
+        },
+        {
+          "id": "cinematic_tone_mapping",
+          "label": "Cinematic tone mapping",
+          "kind": "source",
+          "pass": true
+        },
+        {
+          "id": "bloom_postprocessing",
+          "label": "Bloom / post-processing",
+          "kind": "source",
+          "pass": true
+        },
+        {
+          "id": "instanced_geometry",
+          "label": "Instanced geometry",
+          "kind": "source",
+          "pass": true
+        },
+        {
+          "id": "orbit_controls",
+          "label": "Orbital camera controls",
+          "kind": "source",
+          "pass": true
+        }
+      ],
+      "runtimeChecks": [
+        {
+          "id": "renders_without_error",
+          "label": "Renders with no runtime errors",
+          "kind": "runtime",
+          "pass": true
+        },
+        {
+          "id": "geometry_present",
+          "label": "Substantial geometry (>10k triangles/frame)",
+          "kind": "runtime",
+          "pass": true
+        },
+        {
+          "id": "render_loop_active",
+          "label": "Continuous render loop (draws in both halves of window)",
+          "kind": "runtime",
+          "pass": true
+        },
+        {
+          "id": "interactive_first_draw",
+          "label": "First draw under 5s",
+          "kind": "runtime",
+          "pass": true
+        },
+        {
+          "id": "warm_lighting",
+          "label": "Warm golden-hour sky (pixel-verified)",
+          "kind": "runtime",
+          "pass": true
+        },
+        {
+          "id": "varied_shading",
+          "label": "Varied shading, not flat color (luma stddev > 25)",
+          "kind": "runtime",
+          "pass": true
+        }
+      ]
+    }
+  ],
+  "judged": {
+    "bench": "bench01",
+    "judge": "agent-reference (Opus vision, illustrative)",
+    "method": "per-image absolute rubric (1-5), independent requests to avoid position bias — reference example; run `node judge.mjs` with an API key to regenerate",
+    "dimensions": [
+      "composition",
+      "lighting",
+      "atmosphere",
+      "texture_richness",
+      "postfx"
+    ],
+    "scores": [
+      {
+        "scene": "gpt",
+        "model": "GPT 5.6 Sol",
+        "composition": 4,
+        "lighting": 5,
+        "atmosphere": 5,
+        "texture_richness": 3,
+        "postfx": 4,
+        "overall": 4.2,
+        "notes": "Heavy volumetric fog with a visible sun disc gives outstanding depth and a cinematic mood."
+      },
+      {
+        "scene": "grok4.6",
+        "model": "Grok 4.6",
+        "composition": 3,
+        "lighting": 5,
+        "atmosphere": 3,
+        "texture_richness": 4,
+        "postfx": 5,
+        "overall": 4,
+        "notes": "Dramatic low sun with strong bloom and rich plaster/wood textures, but a foreground tree crops the village."
+      },
+      {
+        "scene": "grok",
+        "model": "Grok 4.5",
+        "composition": 3,
+        "lighting": 4,
+        "atmosphere": 3,
+        "texture_richness": 4,
+        "postfx": 4,
+        "overall": 3.6,
+        "notes": "Warm palette, good material relief, reflective water and fireflies, but the camera sits too close for a village read."
+      },
+      {
+        "scene": "claude",
+        "model": "Claude Fable 5",
+        "composition": 4,
+        "lighting": 3,
+        "atmosphere": 3,
+        "texture_richness": 2,
+        "postfx": 3,
+        "overall": 3,
+        "notes": "Clean, readable overview and nice horizon silhouette, but flat low-poly materials and pale, low-contrast light."
+      }
+    ],
+    "ranking": [
+      "gpt",
+      "grok4.6",
+      "grok",
+      "claude"
+    ]
+  }
+}
