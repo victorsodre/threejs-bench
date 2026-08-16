@@ -1,0 +1,23 @@
+{
+  "name": "threejs-bench-harness",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Reproducible measurement harness and scorecard generator for threejs-bench scenes.",
+  "bin": {
+    "threejs-bench": "./run.mjs"
+  },
+  "scripts": {
+    "run": "node run.mjs",
+    "judge": "node judge.mjs",
+    "scorecard": "node scorecard.mjs",
+    "bench": "node run.mjs && node scorecard.mjs"
+  },
+  "dependencies": {
+    "pngjs": "^7.0.0",
+    "puppeteer-core": "^23.11.1"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

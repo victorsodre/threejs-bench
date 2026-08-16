@@ -28,6 +28,14 @@ Full video runs and honest defect lists, in the original threads:
 
 Download any folder's `index.html` and double-click it. No build, no server — that's rule number one of the benchmark.
 
+## Measure the scenes
+
+Eyeballing is subjective. The [`bench/`](./bench) folder has an optional harness that loads each scene in a fixed headless viewport and reports objective, reproducible numbers — draw calls and triangles per frame, load time, runtime errors — auto-verifies the deterministic parts of the prompt checklist, and generates a [scorecard](./bench/results/bench01/SCORECARD.md). It never touches the published scenes.
+
+```bash
+cd bench && npm install && npm run bench
+```
+
 ## Why publish the raw outputs
 
 A benchmark you can't run yourself is just marketing. These files are the unedited model outputs — judge them with your own eyes.
