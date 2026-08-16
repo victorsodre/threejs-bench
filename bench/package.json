@@ -9,10 +9,12 @@
   },
   "scripts": {
     "run": "node run.mjs",
+    "judge": "node judge.mjs",
     "scorecard": "node scorecard.mjs",
     "bench": "node run.mjs && node scorecard.mjs"
   },
   "dependencies": {
+    "pngjs": "^7.0.0",
     "puppeteer-core": "^23.11.1"
   },
   "engines": {

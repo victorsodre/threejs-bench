@@ -20,7 +20,11 @@ objective, auditable layer:
   cooperation. (Community guidance: aim for well under a few hundred draw calls.)
 - **Load time & time-to-first-draw** — startup cost of procedural generation.
 - **Correctness gate** — the run fails a scene that logs runtime errors.
-- **Requirement coverage** — deterministic source + runtime checks (see below).
+- **Requirement coverage** — deterministic source + runtime checks (see below),
+  including pixel checks over the screenshot (warm golden-hour sky, varied
+  shading) via `lib/pixels.mjs`.
+- **Visual quality (optional)** — a VLM-as-judge rubric pass, kept separate from
+  the composite score (see below).
 
 > **FPS is deliberately not scored.** Without a known GPU it is not comparable —
 > a headless/CI machine renders with software WebGL (SwiftShader). Run on real
@@ -51,21 +55,49 @@ Select a specific bench (default `bench01`):
 node run.mjs --bench bench01 && node scorecard.mjs --bench bench01
 ```
 
+### Visual quality (VLM judge)
+
+`judge.mjs` scores each scene's fixed-camera screenshot against a 1–5 rubric
+(composition, lighting, atmosphere, texture richness, post-fx). Each image is
+judged in its own request, so there is no cross-scene position bias. Results go
+to `judged.json`, which `scorecard.mjs` folds into the scorecard automatically.
+It is deliberately **not** part of the composite score — treat it as a
+supplementary critic.
+
+```bash
+node judge.mjs --dry-run          # write request payloads, call nothing
+ANTHROPIC_API_KEY=... node judge.mjs
+OPENAI_API_KEY=...    node judge.mjs --model gpt-4o
+```
+
+The committed `results/bench01/judged.json` is an illustrative reference; run
+the command with an API key to regenerate it for a bench.
+
+### Continuous integration
+
+`.github/workflows/bench.yml` runs the harness on every push/PR, publishes the
+scorecard to the job summary, and uploads results as an artifact. GitHub runners
+have no GPU (software WebGL), so the same FPS caveat applies — counts,
+requirement checks and the scorecard are stable; use a self-hosted GPU runner
+for real frame rates.
+
 ## Layout
 
 ```
 bench/
   run.mjs            # harness: serve → load → measure → screenshot → checks → metrics.json
-  scorecard.mjs      # metrics.json → SCORECARD.md + scorecard.json
+  judge.mjs          # optional VLM-as-judge visual-quality pass → judged.json
+  scorecard.mjs      # metrics.json (+ judged.json) → SCORECARD.md + scorecard.json
   benches/
     bench01.json     # bench definition: scenes + requirement checklist
   lib/
     server.mjs       # tiny static file server (serves the repo root)
     chrome.mjs       # Chrome executable resolver
     instrument.mjs   # in-page WebGL instrumentation
+    pixels.mjs       # screenshot pixel statistics (sky warmth, brightness, variety)
     checks.mjs       # source + runtime requirement checks
   results/
-    bench01/         # generated: metrics.json, scorecard.json, SCORECARD.md, *.png
+    bench01/         # generated: metrics.json, scorecard.json, SCORECARD.md, judged.json, *.png
 ```
 
 ## Adding a bench
