@@ -1,0 +1,5 @@
+node_modules/
+package-lock.json
+
+# Generated screenshots (regenerated on each run; text results are committed as samples)
+results/**/*.png
