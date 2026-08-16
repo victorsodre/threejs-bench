@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>threejs-bench — scorecard</title>
+  <meta name="description" content="Objective scorecard for one-shot Three.js benchmarks.">
+  <style>
+    :root {
+      --bg: #120f0c;
+      --bg-2: #1b1612;
+      --paper: #241e18;
+      --line: #3a3229;
+      --gold: #e3b56a;
+      --gold-dim: #a0783a;
+      --ink: #f4eadc;
+      --muted: #9a8b78;
+      --pass: #8fbf73;
+      --fail: #d46a52;
+      --a: #e3b56a;
+      --b: #d4894a;
+      --c: #c4b49a;
+      --d: #d46a52;
+      --serif: "Iowan Old Style", Palatino, "Palatino Linotype", Georgia, serif;
+      --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: var(--bg); color: var(--ink); }
+    body {
+      font-family: var(--mono);
+      font-size: 13px;
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+    a { color: var(--gold); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 32px 20px 80px; }
+    header.mast {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px 24px;
+      align-items: end;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 24px;
+      margin-bottom: 28px;
+    }
+    .kicker {
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin: 0 0 8px;
+    }
+    h1 {
+      font-family: var(--serif);
+      font-size: clamp(32px, 6vw, 52px);
+      font-weight: 500;
+      line-height: 1.05;
+      margin: 0;
+      letter-spacing: -0.02em;
+    }
+    .meta { color: var(--muted); max-width: 42em; }
+    .meta code, code {
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+    select {
+      background: var(--paper);
+      color: var(--ink);
+      border: 1px solid var(--line);
+      font-family: var(--mono);
+      font-size: 13px;
+      padding: 8px 12px;
+      border-radius: 4px;
+    }
+    .note {
+      color: var(--muted);
+      border-left: 2px solid var(--gold-dim);
+      padding: 8px 0 8px 14px;
+      margin: 0 0 32px;
+    }
+    h2 {
+      font-family: var(--serif);
+      font-weight: 500;
+      font-size: 22px;
+      margin: 40px 0 16px;
+    }
+    .ranks {
+      display: grid;
+      gap: 12px;
+    }
+    .card {
+      display: grid;
+      grid-template-columns: 64px 1fr auto;
+      gap: 8px 18px;
+      background: var(--bg-2);
+      border: 1px solid var(--line);
+      padding: 16px 18px;
+      align-items: center;
+    }
+    .card .place {
+      font-family: var(--serif);
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .card.r2 .place { color: #c9c2b8; }
+    .card.r3 .place { color: #c4844a; }
+    .card.r4 .place { color: var(--muted); }
+    .model { font-family: var(--serif); font-size: 22px; font-weight: 500; margin: 0; }
+    .sub { color: var(--muted); margin: 2px 0 10px; }
+    .bars { display: grid; gap: 4px; }
+    .bar-row { display: grid; grid-template-columns: 92px 1fr 36px; gap: 8px; align-items: center; color: var(--muted); font-size: 11px; }
+    .track { height: 6px; background: #2c261f; border-radius: 99px; overflow: hidden; }
+    .fill { height: 100%; background: var(--gold); border-radius: 99px; }
+    .fill.perf { background: #d4894a; }
+    .fill.corr { background: var(--pass); }
+    .scorebox { text-align: right; }
+    .composite {
+      font-family: var(--serif);
+      font-size: 40px;
+      font-weight: 700;
+      line-height: 1;
+    }
+    .grade {
+      display: inline-block;
+      margin-top: 4px;
+      border: 1px solid currentColor;
+      padding: 1px 8px;
+      letter-spacing: 0.08em;
+      font-size: 12px;
+    }
+    .grade.A { color: var(--a); }
+    .grade.B { color: var(--b); }
+    .grade.C { color: var(--c); }
+    .grade.D, .grade.F { color: var(--d); }
+    .run { display: inline-block; margin-top: 8px; font-size: 12px; }
+    .table-wrap { overflow-x: auto; border: 1px solid var(--line); }
+    table { width: 100%; border-collapse: collapse; min-width: 640px; }
+    th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th {
+      font-weight: 500;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: var(--bg-2);
+    }
+    td.num { font-variant-numeric: tabular-nums; }
+    .ok { color: var(--pass); }
+    .no { color: var(--fail); }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+    .chips li {
+      border: 1px solid var(--line);
+      padding: 8px 12px;
+      color: var(--muted);
+    }
+    .status {
+      padding: 24px;
+      border: 1px dashed var(--line);
+      color: var(--muted);
+    }
+    .status.error { color: var(--fail); border-color: var(--fail); }
+    footer {
+      margin-top: 48px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
+    }
+    @media (max-width: 720px) {
+      .card { grid-template-columns: 48px 1fr; }
+      .scorebox { grid-column: 1 / -1; text-align: left; }
+      header.mast { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="mast">
+      <div>
+        <p class="kicker">threejs-bench</p>
+        <h1 id="title">Scorecard</h1>
+        <p class="meta" id="meta"></p>
+      </div>
+      <label>
+        <span class="kicker">Bench</span><br>
+        <select id="bench" aria-label="Select benchmark"></select>
+      </label>
+    </header>
+    <p class="note" id="formula"></p>
+    <div id="app"><p class="status">Loading results…</p></div>
+    <footer>
+      One prompt, several models, zero hand-editing.
+      <a href="https://github.com/victorsodre/threejs-bench">Source</a>
+      · <a href="./README.md">Harness docs</a>
+    </footer>
+  </div>
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const params = new URLSearchParams(location.search);
+    const fmt = (n) => Number(n).toLocaleString('en-US');
+    const ms = (n) => (n == null ? 'n/a' : n >= 1000 ? `${(n / 1000).toFixed(1)} s` : `${Math.round(n)} ms`);
+    const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+    }[c]));
+
+    const loadJson = async (url) => {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`${res.status} ${url}`);
+      return res.json();
+    };
+
+    const assemble = async (id) => {
+      const [metrics, scorecard, spec] = await Promise.all([
+        loadJson(`./results/${id}/metrics.json`),
+        loadJson(`./results/${id}/scorecard.json`),
+        loadJson(`./benches/${id}.json`),
+      ]);
+      let judged = null;
+      try { judged = await loadJson(`./results/${id}/judged.json`); } catch { /* optional */ }
+      return {
+        bench: id,
+        title: metrics.title,
+        measuredAt: metrics.measuredAt,
+        glRenderer: metrics.glRenderer,
+        compositeNote: 'Composite = requirements 50% · performance 30% · correctness 20%. FPS is not scored.',
+        fpsNote: 'Software-rendered in headless CI; relative only, not target-hardware FPS.',
+        scenes: spec.scenes.map((s) => ({ ...s, live: `../${s.folder}/` })),
+        manual: spec.requirements.manual,
+        scored: scorecard.scored,
+        metrics: metrics.scenes,
+        judged,
+      };
+    };
+
+    const loadReport = async (id) => {
+      try { return await loadJson(`./results/${id}/report.json`); }
+      catch { return assemble(id); }
+    };
+
+    const metric = (report, scene) => report.metrics.find((m) => m.scene === scene);
+
+    const render = (report) => {
+      document.title = `threejs-bench — ${report.title}`;
+      $('title').textContent = report.title;
+      const when = report.measuredAt ? new Date(report.measuredAt).toISOString().replace('T', ' ').replace(/\.\d+Z$/, ' UTC') : '';
+      $('meta').innerHTML = `Measured ${esc(when)}<br>GL renderer: <code>${esc(report.glRenderer || 'unknown')}</code>`;
+      $('formula').textContent = report.compositeNote || '';
+
+      const ranks = report.scored.map((s, i) => {
+        const m = metric(report, s.scene) || {};
+        const live = (report.scenes.find((x) => x.folder === s.scene) || {}).live || `../${s.scene}/`;
+        return `
+          <article class="card r${i + 1}">
+            <div class="place">${i + 1}</div>
+            <div>
+              <h3 class="model">${esc(s.model)}</h3>
+              <p class="sub"><code>${esc(s.scene)}</code> · ${esc(s.passed)}/${esc(s.total)} checks · ${fmt(m.drawCallsPerFrame ?? 0)} draws/frame · load ${ms(m.loadMs)}</p>
+              <div class="bars">
+                <div class="bar-row"><span>Requirements</span><div class="track"><div class="fill" style="width:${s.requirements}%"></div></div><span>${s.requirements}</span></div>
+                <div class="bar-row"><span>Performance</span><div class="track"><div class="fill perf" style="width:${s.performance}%"></div></div><span>${s.performance}</span></div>
+                <div class="bar-row"><span>Correctness</span><div class="track"><div class="fill corr" style="width:${s.correctness}%"></div></div><span>${s.correctness}</span></div>
+              </div>
+              <a class="run" href="${esc(live)}">Run scene →</a>
+            </div>
+            <div class="scorebox">
+              <div class="composite">${s.composite}</div>
+              <div class="grade ${esc(s.grade)}">${esc(s.grade)}</div>
+            </div>
+          </article>`;
+      }).join('');
+
+      const metricsRows = report.metrics.map((m) => {
+        const errs = (m.consoleErrors?.length || 0) + (m.pageErrors?.length || 0);
+        return `<tr>
+          <td><code>${esc(m.scene)}</code></td>
+          <td>${esc(m.model)}</td>
+          <td>${esc(m.threeVersion)}</td>
+          <td class="num">${fmt(m.drawCallsPerFrame)}</td>
+          <td class="num">${fmt(m.trianglesPerFrame)}</td>
+          <td class="num">${ms(m.loadMs)}</td>
+          <td class="num">${ms(m.timeToFirstDrawMs)}</td>
+          <td class="num">${m.renderFps}</td>
+          <td class="num">${errs}</td>
+        </tr>`;
+      }).join('');
+
+      const first = report.metrics[0];
+      const checks = first ? [...(first.sourceChecks || []), ...(first.runtimeChecks || [])] : [];
+      const reqHead = report.metrics.map((m) => `<th><code>${esc(m.scene)}</code></th>`).join('');
+      const reqRows = checks.map((c) => {
+        const cells = report.metrics.map((m) => {
+          const hit = [...(m.sourceChecks || []), ...(m.runtimeChecks || [])].find((x) => x.id === c.id);
+          if (!hit) return '<td>—</td>';
+          return `<td class="${hit.pass ? 'ok' : 'no'}">${hit.pass ? 'pass' : 'fail'}</td>`;
+        }).join('');
+        return `<tr><td>${esc(c.label)}</td><td>${esc(c.kind)}</td>${cells}</tr>`;
+      }).join('');
+
+      let visual = '<p class="status">No VLM judge file for this bench.</p>';
+      if (report.judged?.scores?.length) {
+        const dims = report.judged.dimensions || [];
+        const vHead = dims.map((d) => `<th>${esc(d.replace(/_/g, ' '))}</th>`).join('');
+        const vRows = [...report.judged.scores].sort((a, b) => b.overall - a.overall).map((s) => `
+          <tr>
+            <td><code>${esc(s.scene)}</code></td>
+            ${dims.map((d) => `<td class="num">${esc(s[d])}</td>`).join('')}
+            <td class="num"><strong>${esc(s.overall)}</strong></td>
+            <td>${esc(s.notes || '')}</td>
+          </tr>`).join('');
+        visual = `
+          <p class="meta">${esc(report.judged.judge || '')} · ${esc(report.judged.method || '')}</p>
+          <div class="table-wrap"><table>
+            <thead><tr><th>Scene</th>${vHead}<th>Overall</th><th>Notes</th></tr></thead>
+            <tbody>${vRows}</tbody>
+          </table></div>
+          <p class="meta">Visual ranking: ${(report.judged.ranking || []).map((r) => `<code>${esc(r)}</code>`).join(' → ')}</p>`;
+      }
+
+      const manual = (report.manual || []).map((item) => `<li>${esc(item)}</li>`).join('');
+
+      $('app').innerHTML = `
+        <h2>Ranking</h2>
+        <div class="ranks">${ranks}</div>
+        <h2>Raw metrics</h2>
+        <div class="table-wrap"><table>
+          <thead><tr>
+            <th>Scene</th><th>Model</th><th>three</th><th>Draws/frame</th>
+            <th>Triangles/frame</th><th>Load</th><th>First draw</th><th>FPS¹</th><th>Errors</th>
+          </tr></thead>
+          <tbody>${metricsRows}</tbody>
+        </table></div>
+        <p class="meta">¹ ${esc(report.fpsNote || '')}</p>
+        <h2>Auto-verified requirements</h2>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Requirement</th><th>Kind</th>${reqHead}</tr></thead>
+          <tbody>${reqRows}</tbody>
+        </table></div>
+        <h2>Visual quality — VLM judge</h2>
+        ${visual}
+        <h2>Manual review checklist</h2>
+        <p class="meta">Not auto-scored. Counts and art direction need a human or VLM with a camera path.</p>
+        <ul class="chips">${manual}</ul>`;
+    };
+
+    const boot = async () => {
+      const current = params.get('bench') || 'bench01';
+      let benches = [current];
+      try {
+        const idx = await loadJson('./benches.json');
+        if (idx.benches?.length) benches = idx.benches;
+      } catch { /* single-bench fallback */ }
+      const sel = $('bench');
+      sel.innerHTML = benches.map((id) => `<option value="${esc(id)}"${id === current ? ' selected' : ''}>${esc(id)}</option>`).join('');
+      sel.addEventListener('change', () => {
+        const next = new URL(location.href);
+        next.searchParams.set('bench', sel.value);
+        location.href = next.href;
+      });
+      try {
+        render(await loadReport(current));
+      } catch (err) {
+        $('app').innerHTML = `<p class="status error">Could not load results for <code>${esc(current)}</code>. Serve the repo over HTTP (GitHub Pages or <code>python3 -m http.server</code>) so the JSON files can be fetched.<br><br>${esc(err.message)}</p>`;
+      }
+    };
+
+    boot();
+  </script>
+</body>
+</html>

@@ -30,7 +30,7 @@ Download any folder's `index.html` and double-click it. No build, no server — 
 
 ## Measure the scenes
 
-Eyeballing is subjective. The [`bench/`](./bench) folder has an optional harness that loads each scene in a fixed headless viewport and reports objective, reproducible numbers — draw calls and triangles per frame, load time, runtime errors — auto-verifies the deterministic parts of the prompt checklist, and generates a [scorecard](./bench/results/bench01/SCORECARD.md). It never touches the published scenes.
+Eyeballing is subjective. The [`bench/`](./bench) folder has an optional harness that loads each scene in a fixed headless viewport and reports objective, reproducible numbers — draw calls and triangles per frame, load time, runtime errors — auto-verifies the deterministic parts of the prompt checklist, and generates a [scorecard](./bench/results/bench01/SCORECARD.md). Browse the same numbers in the [HTML scorecard](https://victorsodre.github.io/threejs-bench/bench/). It never touches the published scenes.
 
 ```bash
 cd bench && npm install && npm run bench
