@@ -1,0 +1,58 @@
+{
+  "bench": "bench01",
+  "generatedAt": "2026-08-16T01:13:43.664Z",
+  "scored": [
+    {
+      "scene": "gpt",
+      "model": "GPT 5.6 Sol",
+      "passed": 15,
+      "total": 15,
+      "requirements": 100,
+      "drawScore": 83,
+      "loadScore": 100,
+      "performance": 92,
+      "correctness": 100,
+      "composite": 97,
+      "grade": "A"
+    },
+    {
+      "scene": "claude",
+      "model": "Claude Fable 5",
+      "passed": 15,
+      "total": 15,
+      "requirements": 100,
+      "drawScore": 76,
+      "loadScore": 100,
+      "performance": 88,
+      "correctness": 100,
+      "composite": 96,
+      "grade": "A"
+    },
+    {
+      "scene": "grok",
+      "model": "Grok 4.5",
+      "passed": 15,
+      "total": 15,
+      "requirements": 100,
+      "drawScore": 26,
+      "loadScore": 35,
+      "performance": 31,
+      "correctness": 100,
+      "composite": 79,
+      "grade": "B"
+    },
+    {
+      "scene": "grok4.6",
+      "model": "Grok 4.6",
+      "passed": 15,
+      "total": 15,
+      "requirements": 100,
+      "drawScore": 31,
+      "loadScore": 3,
+      "performance": 17,
+      "correctness": 100,
+      "composite": 75,
+      "grade": "B"
+    }
+  ]
+}
