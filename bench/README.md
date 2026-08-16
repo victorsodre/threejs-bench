@@ -39,8 +39,17 @@ npm install                 # installs puppeteer-core (uses your local Chrome)
 npm run bench               # measure all scenes + generate the scorecard
 # or step by step:
 npm run run                 # writes results/<bench>/metrics.json + screenshots
-npm run scorecard           # writes results/<bench>/SCORECARD.md + scorecard.json
+npm run scorecard           # writes SCORECARD.md + scorecard.json + report.json
 ```
+
+Open the HTML scorecard (ranking, raw metrics, requirement matrix, VLM judge) at [`index.html`](./index.html). It reads `results/<bench>/report.json`, so any new bench that the harness measures shows up there. Serve the repo over HTTP:
+
+```bash
+python3 -m http.server 8000
+# then http://localhost:8000/bench/
+```
+
+On GitHub Pages: https://victorsodre.github.io/threejs-bench/bench/
 
 `puppeteer-core` does not download a browser. The harness auto-detects Google
 Chrome / Chromium in the usual locations; override with:
@@ -85,9 +94,11 @@ for real frame rates.
 
 ```
 bench/
+  index.html         # HTML scorecard (reads report.json)
   run.mjs            # harness: serve → load → measure → screenshot → checks → metrics.json
   judge.mjs          # optional VLM-as-judge visual-quality pass → judged.json
-  scorecard.mjs      # metrics.json (+ judged.json) → SCORECARD.md + scorecard.json
+  scorecard.mjs      # metrics.json (+ judged.json) → SCORECARD.md + scorecard.json + report.json
+  benches.json       # discovered bench ids (written by scorecard.mjs)
   benches/
     bench01.json     # bench definition: scenes + requirement checklist
   lib/
@@ -97,7 +108,7 @@ bench/
     pixels.mjs       # screenshot pixel statistics (sky warmth, brightness, variety)
     checks.mjs       # source + runtime requirement checks
   results/
-    bench01/         # generated: metrics.json, scorecard.json, SCORECARD.md, judged.json, *.png
+    bench01/         # generated: metrics.json, scorecard.json, report.json, SCORECARD.md, judged.json, *.png
 ```
 
 ## Adding a bench

@@ -11,7 +11,7 @@
 // rendering), so it is reported for information only.
 //
 // Usage: node scorecard.mjs [--bench bench01]
-import { readFile, writeFile } from 'node:fs/promises';
+import { readdir, readFile, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -170,8 +170,41 @@ const main = async () => {
   await writeFile(join(dir, 'SCORECARD.md'), md);
   await writeFile(join(dir, 'scorecard.json'), JSON.stringify({ bench: benchId, generatedAt: data.measuredAt, scored }, null, 2));
 
+  let judged = null;
+  if (existsSync(judgedPath)) judged = JSON.parse(await readFile(judgedPath, 'utf8'));
+
+  const report = {
+    bench: benchId,
+    title: data.title,
+    measuredAt: data.measuredAt,
+    glRenderer: data.glRenderer,
+    weights: WEIGHTS,
+    budgets: { draw: DRAW_BUDGET, load: LOAD_BUDGET },
+    compositeNote:
+      'Composite = requirements 50% · performance 30% · correctness 20%. ' +
+      'Performance is graded against fixed budgets (draw calls, load time). FPS is not scored.',
+    fpsNote: 'Software-rendered in headless CI; relative only, not target-hardware FPS.',
+    scenes: spec.scenes.map((s) => ({
+      folder: s.folder,
+      model: s.model,
+      generationTime: s.generationTime,
+      live: `../${s.folder}/`,
+    })),
+    manual: spec.requirements.manual,
+    scored,
+    metrics: data.scenes,
+    judged,
+  };
+  await writeFile(join(dir, 'report.json'), JSON.stringify(report, null, 2));
+
+  const benchIds = (await readdir(join(__dirname, 'benches')))
+    .filter((f) => f.endsWith('.json'))
+    .map((f) => f.replace(/\.json$/, ''))
+    .sort();
+  await writeFile(join(__dirname, 'benches.json'), JSON.stringify({ benches: benchIds }, null, 2));
+
   console.log(md);
-  console.log(`\nWrote ${join('results', benchId, 'SCORECARD.md')} and scorecard.json`);
+  console.log(`\nWrote ${join('results', benchId, 'SCORECARD.md')}, scorecard.json and report.json`);
 };
 
 main().catch((e) => {
