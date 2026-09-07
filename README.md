@@ -1,16 +1,16 @@
 # threejs-bench
 
-One prompt. Several AI models. Zero hand-editing.
+Reproducible evaluations of one-shot, AI-generated Three.js scenes.
 
-Real-world 3D benchmarks by [@ovictor](https://x.com/ovictor). Each model gets the exact same one-shot prompt and must deliver a single self-contained Three.js HTML file. No agents, no retries, no asset downloads, no cleanup afterwards. What the model outputs is what gets published — defects included.
+This repository records browser-based 3D evaluations by [@ovictor](https://x.com/ovictor). Each model receives the same one-shot prompt and returns one self-contained Three.js HTML file. The published scene is the original output: no follow-up generation, manual cleanup, or substituted assets. Known defects remain documented alongside the output.
 
 ## Method
 
-Same prompt, verbatim, for every model ([PROMPT.md](./PROMPT.md)). One shot: a single response, no follow-ups, no regeneration. Model only — no agent scaffolding. Output must be a single HTML file with Three.js via CDN, every model built in code and every texture generated procedurally. Generation time is recorded, honest defects are listed publicly, and the file is published unmodified.
+The prompt is identical for every model ([PROMPT.md](./PROMPT.md)). Each run consists of a single response without follow-ups or regeneration. The output must be one HTML file using Three.js via CDN, with scene geometry expressed in code and procedural textures. Generation time and observed defects are recorded, while the returned file is preserved unchanged.
 
 ## Bench 01 — Medieval village at golden hour
 
-Prompt: [PROMPT.md](./PROMPT.md) (written in PT-BR — every model handled it fine).
+Prompt: [PROMPT.md](./PROMPT.md). It is retained in its original PT-BR form as part of the experimental record.
 
 | Model | Generation time | Live demo | Notes |
 |---|---|---|---|
@@ -19,7 +19,7 @@ Prompt: [PROMPT.md](./PROMPT.md) (written in PT-BR — every model handled it fi
 | GPT 5.6 Sol | 30 min | [run it](https://victorsodre.github.io/threejs-bench/gpt/) | Most detailed scene — and by far the slowest |
 | Grok 4.6 | 7 min | [run it](https://victorsodre.github.io/threejs-bench/grok4.6/) | Added on release day (2026-08-12). Big jump in lighting and textures. Known defects: object placement, decal-looking water, windmill blades clipping the tower |
 
-Full video runs and honest defect lists, in the original threads:
+Full generation recordings and defect notes are available in the original threads:
 
 - Bench 01 — Claude × Grok 4.5 × GPT: https://x.com/ovictor/status/2087174144840405380
 - Grok 4.5 → 4.6, same prompt, one day apart: https://x.com/ovictor/status/2087603794678808980
@@ -38,8 +38,8 @@ cd bench && npm install && npm run bench
 
 ## Why publish the raw outputs
 
-A benchmark you can't run yourself is just marketing. These files are the unedited model outputs — judge them with your own eyes.
+The source files, prompt, and measured results are public so readers can inspect the procedure and evaluate the scenes independently. The model outputs remain unedited benchmark artifacts.
 
 ---
 
-by Victor Sodré · [@ovictor](https://x.com/ovictor) — código, motion e IA em público.
+By Victor Sodré · [@ovictor](https://x.com/ovictor)

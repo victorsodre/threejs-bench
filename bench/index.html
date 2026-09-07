@@ -73,6 +73,12 @@
       padding: 8px 12px;
       border-radius: 4px;
     }
+    .language { display: flex; gap: 6px; margin-top: 10px; }
+    .language button {
+      background: transparent; color: var(--ink); border: 1px solid var(--line);
+      padding: 6px 9px; border-radius: 4px; cursor: pointer; font: inherit; font-size: 11px;
+    }
+    .language button[aria-pressed="true"] { border-color: var(--gold); color: var(--gold); }
     .note {
       color: var(--muted);
       border-left: 2px solid var(--gold-dim);
@@ -182,6 +188,10 @@
         <p class="kicker">threejs-bench</p>
         <h1 id="title">Scorecard</h1>
         <p class="meta" id="meta"></p>
+        <div class="language" role="group" aria-label="Language">
+          <button type="button" data-lang="en" aria-pressed="true">English</button>
+          <button type="button" data-lang="pt" aria-pressed="false">Português (Brasil)</button>
+        </div>
       </div>
       <label>
         <span class="kicker">Bench</span><br>
@@ -191,15 +201,22 @@
     <p class="note" id="formula"></p>
     <div id="app"><p class="status">Loading results…</p></div>
     <footer>
-      One prompt, several models, zero hand-editing.
+      <span id="footer-note">One prompt, several models, zero hand-editing.</span>
       <a href="https://github.com/victorsodre/threejs-bench">Source</a>
-      · <a href="./README.md">Harness docs</a>
+      · <a id="harness-docs" href="./README.md">Harness docs</a>
     </footer>
   </div>
   <script>
     const $ = (id) => document.getElementById(id);
     const params = new URLSearchParams(location.search);
-    const fmt = (n) => Number(n).toLocaleString('en-US');
+    const TEXT = {
+      en: { bench: 'Bench', selectBench: 'Select benchmark', loading: 'Loading results…', footer: 'One prompt, several models, zero hand-editing.', docs: 'Harness docs', measured: 'Measured', renderer: 'GL renderer', requirements: 'Requirements', performance: 'Performance', correctness: 'Correctness', run: 'Run scene →', ranking: 'Ranking', raw: 'Raw metrics', scene: 'Scene', model: 'Model', draws: 'Draws/frame', triangles: 'Triangles/frame', load: 'Load', firstDraw: 'First draw', errors: 'Errors', auto: 'Auto-verified requirements', requirement: 'Requirement', kind: 'Kind', visual: 'Visual quality — VLM judge', manual: 'Manual review checklist', manualNote: 'Not auto-scored. Counts and art direction need a human or VLM with a camera path.', noJudge: 'No VLM judge file for this bench.', visualRanking: 'Visual ranking:', pass: 'pass', fail: 'fail', unavailable: 'Could not load results for', serve: 'Serve the repo over HTTP (GitHub Pages or', fetched: 'so the JSON files can be fetched.', composite: 'Composite = requirements 50% · performance 30% · correctness 20%. Performance is graded against fixed budgets (draw calls, load time). FPS is not scored.', fps: 'Software-rendered in headless CI; relative only, not target-hardware FPS.' },
+      pt: { bench: 'Benchmark', selectBench: 'Selecionar benchmark', loading: 'Carregando resultados…', footer: 'Um prompt, vários modelos, sem edição manual.', docs: 'Documentação do harness', measured: 'Medição', renderer: 'Renderizador GL', requirements: 'Requisitos', performance: 'Desempenho', correctness: 'Corretude', run: 'Abrir cena →', ranking: 'Classificação', raw: 'Métricas brutas', scene: 'Cena', model: 'Modelo', draws: 'Draw calls/frame', triangles: 'Triângulos/frame', load: 'Carregamento', firstDraw: 'Primeiro frame', errors: 'Erros', auto: 'Requisitos verificados automaticamente', requirement: 'Requisito', kind: 'Tipo', visual: 'Qualidade visual — avaliação VLM', manual: 'Checklist de revisão manual', manualNote: 'Não avaliado automaticamente. Contagens e direção de arte exigem uma pessoa ou VLM com caminho de câmera.', noJudge: 'Não há arquivo de avaliação VLM para este benchmark.', visualRanking: 'Classificação visual:', pass: 'aprovado', fail: 'falhou', unavailable: 'Não foi possível carregar os resultados de', serve: 'Sirva o repositório por HTTP (GitHub Pages ou', fetched: 'para que os arquivos JSON possam ser obtidos.', composite: 'Composto = requisitos 50% · desempenho 30% · corretude 20%. O desempenho usa orçamentos fixos (draw calls e carregamento). FPS não entra na pontuação.', fps: 'Renderizado por software em CI headless; serve apenas como referência relativa, não como FPS do hardware-alvo.' },
+    };
+    const storedLanguage = () => { try { return localStorage.getItem('threejs-bench-language'); } catch { return null; } };
+    let language = storedLanguage() === 'pt' ? 'pt' : 'en';
+    const t = (key) => TEXT[language][key];
+    const fmt = (n) => Number(n).toLocaleString(language === 'pt' ? 'pt-BR' : 'en-US');
     const ms = (n) => (n == null ? 'n/a' : n >= 1000 ? `${(n / 1000).toFixed(1)} s` : `${Math.round(n)} ms`);
     const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({
       '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
@@ -245,8 +262,8 @@
       document.title = `threejs-bench — ${report.title}`;
       $('title').textContent = report.title;
       const when = report.measuredAt ? new Date(report.measuredAt).toISOString().replace('T', ' ').replace(/\.\d+Z$/, ' UTC') : '';
-      $('meta').innerHTML = `Measured ${esc(when)}<br>GL renderer: <code>${esc(report.glRenderer || 'unknown')}</code>`;
-      $('formula').textContent = report.compositeNote || '';
+      $('meta').innerHTML = `${t('measured')} ${esc(when)}<br>${t('renderer')}: <code>${esc(report.glRenderer || 'unknown')}</code>`;
+      $('formula').textContent = t('composite');
 
       const ranks = report.scored.map((s, i) => {
         const m = metric(report, s.scene) || {};
@@ -256,13 +273,13 @@
             <div class="place">${i + 1}</div>
             <div>
               <h3 class="model">${esc(s.model)}</h3>
-              <p class="sub"><code>${esc(s.scene)}</code> · ${esc(s.passed)}/${esc(s.total)} checks · ${fmt(m.drawCallsPerFrame ?? 0)} draws/frame · load ${ms(m.loadMs)}</p>
+              <p class="sub"><code>${esc(s.scene)}</code> · ${esc(s.passed)}/${esc(s.total)} checks · ${fmt(m.drawCallsPerFrame ?? 0)} draws/frame · ${t('load').toLowerCase()} ${ms(m.loadMs)}</p>
               <div class="bars">
-                <div class="bar-row"><span>Requirements</span><div class="track"><div class="fill" style="width:${s.requirements}%"></div></div><span>${s.requirements}</span></div>
-                <div class="bar-row"><span>Performance</span><div class="track"><div class="fill perf" style="width:${s.performance}%"></div></div><span>${s.performance}</span></div>
-                <div class="bar-row"><span>Correctness</span><div class="track"><div class="fill corr" style="width:${s.correctness}%"></div></div><span>${s.correctness}</span></div>
+                <div class="bar-row"><span>${t('requirements')}</span><div class="track"><div class="fill" style="width:${s.requirements}%"></div></div><span>${s.requirements}</span></div>
+                <div class="bar-row"><span>${t('performance')}</span><div class="track"><div class="fill perf" style="width:${s.performance}%"></div></div><span>${s.performance}</span></div>
+                <div class="bar-row"><span>${t('correctness')}</span><div class="track"><div class="fill corr" style="width:${s.correctness}%"></div></div><span>${s.correctness}</span></div>
               </div>
-              <a class="run" href="${esc(live)}">Run scene →</a>
+              <a class="run" href="${esc(live)}">${t('run')}</a>
             </div>
             <div class="scorebox">
               <div class="composite">${s.composite}</div>
@@ -293,12 +310,12 @@
         const cells = report.metrics.map((m) => {
           const hit = [...(m.sourceChecks || []), ...(m.runtimeChecks || [])].find((x) => x.id === c.id);
           if (!hit) return '<td>—</td>';
-          return `<td class="${hit.pass ? 'ok' : 'no'}">${hit.pass ? 'pass' : 'fail'}</td>`;
+          return `<td class="${hit.pass ? 'ok' : 'no'}">${hit.pass ? t('pass') : t('fail')}</td>`;
         }).join('');
         return `<tr><td>${esc(c.label)}</td><td>${esc(c.kind)}</td>${cells}</tr>`;
       }).join('');
 
-      let visual = '<p class="status">No VLM judge file for this bench.</p>';
+      let visual = `<p class="status">${t('noJudge')}</p>`;
       if (report.judged?.scores?.length) {
         const dims = report.judged.dimensions || [];
         const vHead = dims.map((d) => `<th>${esc(d.replace(/_/g, ' '))}</th>`).join('');
@@ -315,32 +332,32 @@
             <thead><tr><th>Scene</th>${vHead}<th>Overall</th><th>Notes</th></tr></thead>
             <tbody>${vRows}</tbody>
           </table></div>
-          <p class="meta">Visual ranking: ${(report.judged.ranking || []).map((r) => `<code>${esc(r)}</code>`).join(' → ')}</p>`;
+          <p class="meta">${t('visualRanking')} ${(report.judged.ranking || []).map((r) => `<code>${esc(r)}</code>`).join(' → ')}</p>`;
       }
 
       const manual = (report.manual || []).map((item) => `<li>${esc(item)}</li>`).join('');
 
       $('app').innerHTML = `
-        <h2>Ranking</h2>
+        <h2>${t('ranking')}</h2>
         <div class="ranks">${ranks}</div>
-        <h2>Raw metrics</h2>
+        <h2>${t('raw')}</h2>
         <div class="table-wrap"><table>
           <thead><tr>
-            <th>Scene</th><th>Model</th><th>three</th><th>Draws/frame</th>
-            <th>Triangles/frame</th><th>Load</th><th>First draw</th><th>FPS¹</th><th>Errors</th>
+            <th>${t('scene')}</th><th>${t('model')}</th><th>three</th><th>${t('draws')}</th>
+            <th>${t('triangles')}</th><th>${t('load')}</th><th>${t('firstDraw')}</th><th>FPS¹</th><th>${t('errors')}</th>
           </tr></thead>
           <tbody>${metricsRows}</tbody>
         </table></div>
-        <p class="meta">¹ ${esc(report.fpsNote || '')}</p>
-        <h2>Auto-verified requirements</h2>
+        <p class="meta">¹ ${t('fps')}</p>
+        <h2>${t('auto')}</h2>
         <div class="table-wrap"><table>
-          <thead><tr><th>Requirement</th><th>Kind</th>${reqHead}</tr></thead>
+          <thead><tr><th>${t('requirement')}</th><th>${t('kind')}</th>${reqHead}</tr></thead>
           <tbody>${reqRows}</tbody>
         </table></div>
-        <h2>Visual quality — VLM judge</h2>
+        <h2>${t('visual')}</h2>
         ${visual}
-        <h2>Manual review checklist</h2>
-        <p class="meta">Not auto-scored. Counts and art direction need a human or VLM with a camera path.</p>
+        <h2>${t('manual')}</h2>
+        <p class="meta">${t('manualNote')}</p>
         <ul class="chips">${manual}</ul>`;
     };
 
@@ -353,19 +370,32 @@
       } catch { /* single-bench fallback */ }
       const sel = $('bench');
       sel.innerHTML = benches.map((id) => `<option value="${esc(id)}"${id === current ? ' selected' : ''}>${esc(id)}</option>`).join('');
-      sel.addEventListener('change', () => {
+      sel.onchange = () => {
         const next = new URL(location.href);
         next.searchParams.set('bench', sel.value);
         location.href = next.href;
-      });
+      };
       try {
         render(await loadReport(current));
       } catch (err) {
-        $('app').innerHTML = `<p class="status error">Could not load results for <code>${esc(current)}</code>. Serve the repo over HTTP (GitHub Pages or <code>python3 -m http.server</code>) so the JSON files can be fetched.<br><br>${esc(err.message)}</p>`;
+        $('app').innerHTML = `<p class="status error">${t('unavailable')} <code>${esc(current)}</code>. ${t('serve')} <code>python3 -m http.server</code>) ${t('fetched')}<br><br>${esc(err.message)}</p>`;
       }
     };
 
-    boot();
+    const applyLanguage = (next) => {
+      language = next;
+      try { localStorage.setItem('threejs-bench-language', language); } catch { /* preference remains in memory */ }
+      document.documentElement.lang = language === 'pt' ? 'pt-BR' : 'en';
+      document.querySelectorAll('[data-lang]').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.lang === language)));
+      document.querySelector('.kicker + h1').textContent = language === 'pt' ? 'Placar' : 'Scorecard';
+      document.querySelector('label .kicker').textContent = t('bench');
+      $('bench').setAttribute('aria-label', t('selectBench'));
+      $('footer-note').textContent = t('footer');
+      $('harness-docs').textContent = t('docs');
+      boot();
+    };
+    document.querySelectorAll('[data-lang]').forEach((button) => button.addEventListener('click', () => applyLanguage(button.dataset.lang)));
+    applyLanguage(language);
   </script>
 </body>
 </html>
