@@ -8,6 +8,7 @@
   <link rel="canonical" href="bench/">
   <style>
     :root { color-scheme: dark; font-family: ui-sans-serif, system-ui, sans-serif; background: #120f0c; color: #f4eadc; }
+    *, *::before, *::after { box-sizing: border-box; }
     body { display: grid; place-items: center; min-height: 100vh; margin: 0; padding: 24px; }
     main { width: min(620px, 100%); border: 1px solid #3a3229; background: #1b1612; padding: 32px; }
     h1 { margin: 0 0 12px; font-family: Georgia, serif; font-weight: 500; }
@@ -27,7 +28,7 @@
     <div class="actions">
       <a class="open" id="open" href="bench/">Open the scorecard →</a>
       <a id="readme" href="README.md">Read the method</a>
-      <div class="language" role="group" aria-label="Language">
+      <div class="language" id="language-picker" role="group" aria-label="Language">
         <button type="button" data-lang="en" aria-pressed="true">English</button>
         <button type="button" data-lang="pt" aria-pressed="false">Português (Brasil)</button>
       </div>
@@ -35,8 +36,8 @@
   </main>
   <script>
     const copy = {
-      en: { description: 'Reproducible evaluations of one-shot, AI-generated Three.js scenes. The published outputs and measurements remain available for inspection.', open: 'Open the scorecard →', method: 'Read the method' },
-      pt: { description: 'Avaliações reproduzíveis de cenas Three.js geradas por IA em uma tentativa. Os resultados publicados e as medições continuam disponíveis para inspeção.', open: 'Abrir o placar →', method: 'Ler o método' },
+      en: { language: 'Language', description: 'Reproducible evaluations of one-shot, AI-generated Three.js scenes. The published outputs and measurements remain available for inspection.', open: 'Open the scorecard →', method: 'Read the method' },
+      pt: { language: 'Idioma', description: 'Avaliações reproduzíveis de cenas Three.js geradas por IA em uma tentativa. Os resultados publicados e as medições continuam disponíveis para inspeção.', open: 'Abrir o placar →', method: 'Ler o método' },
     };
     const initial = new URLSearchParams(location.search).get('lang');
     let language = initial === 'pt' ? 'pt' : 'en';
@@ -48,6 +49,7 @@
       document.getElementById('open').textContent = copy[language].open;
       document.getElementById('open').href = `bench/?lang=${language}`;
       document.getElementById('readme').textContent = copy[language].method;
+      document.getElementById('language-picker').setAttribute('aria-label', copy[language].language);
       document.querySelectorAll('[data-lang]').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.lang === language)));
     };
     document.querySelectorAll('[data-lang]').forEach((button) => button.addEventListener('click', () => apply(button.dataset.lang)));

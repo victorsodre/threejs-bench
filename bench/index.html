@@ -188,7 +188,7 @@
         <p class="kicker">threejs-bench</p>
         <h1 id="title">Scorecard</h1>
         <p class="meta" id="meta"></p>
-        <div class="language" role="group" aria-label="Language">
+        <div class="language" role="group" id="language-picker" aria-label="Language">
           <button type="button" data-lang="en" aria-pressed="true">English</button>
           <button type="button" data-lang="pt" aria-pressed="false">Português (Brasil)</button>
         </div>
@@ -202,7 +202,7 @@
     <div id="app"><p class="status">Loading results…</p></div>
     <footer>
       <span id="footer-note">One prompt, several models, zero hand-editing.</span>
-      <a href="https://github.com/victorsodre/threejs-bench">Source</a>
+      <a id="source" href="https://github.com/victorsodre/threejs-bench">Source</a>
       · <a id="harness-docs" href="./README.md">Harness docs</a>
     </footer>
   </div>
@@ -210,8 +210,18 @@
     const $ = (id) => document.getElementById(id);
     const params = new URLSearchParams(location.search);
     const TEXT = {
-      en: { bench: 'Bench', selectBench: 'Select benchmark', loading: 'Loading results…', footer: 'One prompt, several models, zero hand-editing.', docs: 'Harness docs', measured: 'Measured', renderer: 'GL renderer', requirements: 'Requirements', performance: 'Performance', correctness: 'Correctness', run: 'Run scene →', ranking: 'Ranking', raw: 'Raw metrics', scene: 'Scene', model: 'Model', draws: 'Draws/frame', triangles: 'Triangles/frame', load: 'Load', firstDraw: 'First draw', errors: 'Errors', auto: 'Auto-verified requirements', requirement: 'Requirement', kind: 'Kind', visual: 'Visual quality — VLM judge', manual: 'Manual review checklist', manualNote: 'Not auto-scored. Counts and art direction need a human or VLM with a camera path.', noJudge: 'No VLM judge file for this bench.', visualRanking: 'Visual ranking:', pass: 'pass', fail: 'fail', unavailable: 'Could not load results for', serve: 'Serve the repo over HTTP (GitHub Pages or', fetched: 'so the JSON files can be fetched.', composite: 'Composite = requirements 50% · performance 30% · correctness 20%. Performance is graded against fixed budgets (draw calls, load time). FPS is not scored.', fps: 'Software-rendered in headless CI; relative only, not target-hardware FPS.' },
-      pt: { bench: 'Benchmark', selectBench: 'Selecionar benchmark', loading: 'Carregando resultados…', footer: 'Um prompt, vários modelos, sem edição manual.', docs: 'Documentação do harness', measured: 'Medição', renderer: 'Renderizador GL', requirements: 'Requisitos', performance: 'Desempenho', correctness: 'Corretude', run: 'Abrir cena →', ranking: 'Classificação', raw: 'Métricas brutas', scene: 'Cena', model: 'Modelo', draws: 'Draw calls/frame', triangles: 'Triângulos/frame', load: 'Carregamento', firstDraw: 'Primeiro frame', errors: 'Erros', auto: 'Requisitos verificados automaticamente', requirement: 'Requisito', kind: 'Tipo', visual: 'Qualidade visual — avaliação VLM', manual: 'Checklist de revisão manual', manualNote: 'Não avaliado automaticamente. Contagens e direção de arte exigem uma pessoa ou VLM com caminho de câmera.', noJudge: 'Não há arquivo de avaliação VLM para este benchmark.', visualRanking: 'Classificação visual:', pass: 'aprovado', fail: 'falhou', unavailable: 'Não foi possível carregar os resultados de', serve: 'Sirva o repositório por HTTP (GitHub Pages ou', fetched: 'para que os arquivos JSON possam ser obtidos.', composite: 'Composto = requisitos 50% · desempenho 30% · corretude 20%. O desempenho usa orçamentos fixos (draw calls e carregamento). FPS não entra na pontuação.', fps: 'Renderizado por software em CI headless; serve apenas como referência relativa, não como FPS do hardware-alvo.' },
+      en: { language: 'Language', bench: 'Bench', selectBench: 'Select benchmark', loading: 'Loading results…', footer: 'One prompt, several models, zero hand-editing.', source: 'Source', docs: 'Harness docs', measured: 'Measured', renderer: 'GL renderer', requirements: 'Requirements', performance: 'Performance', correctness: 'Correctness', checks: 'checks', draws: 'draws/frame', run: 'Run scene →', ranking: 'Ranking', raw: 'Raw metrics', scene: 'Scene', model: 'Model', triangles: 'Triangles/frame', load: 'Load', firstDraw: 'First draw', errors: 'Errors', auto: 'Auto-verified requirements', requirement: 'Requirement', kind: 'Kind', visual: 'Visual quality — VLM judge', overall: 'Overall', notes: 'Notes', manual: 'Manual review checklist', manualNote: 'Not auto-scored. Counts and art direction need a human or VLM with a camera path.', noJudge: 'No VLM judge file for this bench.', visualRanking: 'Visual ranking:', pass: 'pass', fail: 'fail', unavailable: 'Could not load results for', serve: 'Serve the repo over HTTP (GitHub Pages or', fetched: 'so the JSON files can be fetched.', evidenceNote: 'Measurement data and quoted assessment notes are original evidence.', originalEvidence: 'Original evidence:', noTranslatedEvidence: 'No PT-BR translation is available for this evidence.' },
+      pt: { language: 'Idioma', bench: 'Benchmark', selectBench: 'Selecionar benchmark', loading: 'Carregando resultados…', footer: 'Um prompt, vários modelos, sem edição manual.', source: 'Código-fonte', docs: 'Documentação do harness', measured: 'Medição', renderer: 'Renderizador GL', requirements: 'Requisitos', performance: 'Desempenho', correctness: 'Corretude', checks: 'verificações', draws: 'draw calls/frame', run: 'Abrir cena →', ranking: 'Classificação', raw: 'Métricas brutas', scene: 'Cena', model: 'Modelo', triangles: 'Triângulos/frame', load: 'Carregamento', firstDraw: 'Primeiro frame', errors: 'Erros', auto: 'Requisitos verificados automaticamente', requirement: 'Requisito', kind: 'Tipo', visual: 'Qualidade visual — avaliação VLM', overall: 'Geral', notes: 'Observações', manual: 'Checklist de revisão manual', manualNote: 'Não avaliado automaticamente. Contagens e direção de arte exigem uma pessoa ou VLM com caminho de câmera.', noJudge: 'Não há arquivo de avaliação VLM para este benchmark.', visualRanking: 'Classificação visual:', pass: 'aprovado', fail: 'falhou', unavailable: 'Não foi possível carregar os resultados de', serve: 'Sirva o repositório por HTTP (GitHub Pages ou', fetched: 'para que os arquivos JSON possam ser obtidos.', evidenceNote: 'Os dados de medição e as observações citadas são evidência original.', originalEvidence: 'Evidência original:', noTranslatedEvidence: 'Não há tradução PT-BR disponível para esta evidência.' },
+    };
+    const REPORT_TRANSLATIONS = {
+      bench01: {
+        compositeNote: {
+          'Composite = requirements 50% · performance 30% · correctness 20%. Performance is graded against fixed budgets (draw calls, load time). FPS is not scored.': 'Composto = requisitos 50% · desempenho 30% · corretude 20%. O desempenho usa orçamentos fixos (draw calls e carregamento). FPS não entra na pontuação.',
+        },
+        fpsNote: {
+          'Software-rendered in headless CI; relative only, not target-hardware FPS.': 'Renderizado por software em CI headless; serve apenas como referência relativa, não como FPS do hardware-alvo.',
+        },
+      },
     };
     const storedLanguage = () => { try { return localStorage.getItem('threejs-bench-language'); } catch { return null; } };
     const requestedLanguage = params.get('lang');
@@ -222,6 +232,12 @@
     const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({
       '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
     }[c]));
+    const translatedEvidence = (report, field) => {
+      const original = report[field] || '';
+      if (language === 'en') return original;
+      return REPORT_TRANSLATIONS[report.bench]?.[field]?.[original]
+        || `${t('originalEvidence')} ${original} ${t('noTranslatedEvidence')}`;
+    };
 
     const loadJson = async (url) => {
       const res = await fetch(url);
@@ -264,7 +280,7 @@
       $('title').textContent = report.title;
       const when = report.measuredAt ? new Date(report.measuredAt).toISOString().replace('T', ' ').replace(/\.\d+Z$/, ' UTC') : '';
       $('meta').innerHTML = `${t('measured')} ${esc(when)}<br>${t('renderer')}: <code>${esc(report.glRenderer || 'unknown')}</code>`;
-      $('formula').textContent = t('composite');
+      $('formula').textContent = translatedEvidence(report, 'compositeNote');
 
       const ranks = report.scored.map((s, i) => {
         const m = metric(report, s.scene) || {};
@@ -274,7 +290,7 @@
             <div class="place">${i + 1}</div>
             <div>
               <h3 class="model">${esc(s.model)}</h3>
-              <p class="sub"><code>${esc(s.scene)}</code> · ${esc(s.passed)}/${esc(s.total)} checks · ${fmt(m.drawCallsPerFrame ?? 0)} draws/frame · ${t('load').toLowerCase()} ${ms(m.loadMs)}</p>
+              <p class="sub"><code>${esc(s.scene)}</code> · ${esc(s.passed)}/${esc(s.total)} ${t('checks')} · ${fmt(m.drawCallsPerFrame ?? 0)} ${t('draws')} · ${t('load').toLowerCase()} ${ms(m.loadMs)}</p>
               <div class="bars">
                 <div class="bar-row"><span>${t('requirements')}</span><div class="track"><div class="fill" style="width:${s.requirements}%"></div></div><span>${s.requirements}</span></div>
                 <div class="bar-row"><span>${t('performance')}</span><div class="track"><div class="fill perf" style="width:${s.performance}%"></div></div><span>${s.performance}</span></div>
@@ -330,7 +346,7 @@
         visual = `
           <p class="meta">${esc(report.judged.judge || '')} · ${esc(report.judged.method || '')}</p>
           <div class="table-wrap"><table>
-            <thead><tr><th>Scene</th>${vHead}<th>Overall</th><th>Notes</th></tr></thead>
+            <thead><tr><th>${t('scene')}</th>${vHead}<th>${t('overall')}</th><th>${t('notes')}</th></tr></thead>
             <tbody>${vRows}</tbody>
           </table></div>
           <p class="meta">${t('visualRanking')} ${(report.judged.ranking || []).map((r) => `<code>${esc(r)}</code>`).join(' → ')}</p>`;
@@ -339,6 +355,7 @@
       const manual = (report.manual || []).map((item) => `<li>${esc(item)}</li>`).join('');
 
       $('app').innerHTML = `
+        <p class="meta">${t('evidenceNote')}</p>
         <h2>${t('ranking')}</h2>
         <div class="ranks">${ranks}</div>
         <h2>${t('raw')}</h2>
@@ -349,7 +366,7 @@
           </tr></thead>
           <tbody>${metricsRows}</tbody>
         </table></div>
-        <p class="meta">¹ ${t('fps')}</p>
+        <p class="meta">¹ ${esc(translatedEvidence(report, 'fpsNote'))}</p>
         <h2>${t('auto')}</h2>
         <div class="table-wrap"><table>
           <thead><tr><th>${t('requirement')}</th><th>${t('kind')}</th>${reqHead}</tr></thead>
@@ -360,6 +377,22 @@
         <h2>${t('manual')}</h2>
         <p class="meta">${t('manualNote')}</p>
         <ul class="chips">${manual}</ul>`;
+    };
+
+    let activeReport = null;
+    let activeBench = null;
+    const reportCache = new Map();
+
+    const showReport = async (id) => {
+      activeBench = id;
+      try {
+        if (!reportCache.has(id)) reportCache.set(id, loadReport(id));
+        activeReport = await reportCache.get(id);
+        render(activeReport);
+      } catch (err) {
+        activeReport = null;
+        $('app').innerHTML = `<p class="status error">${t('unavailable')} <code>${esc(id)}</code>. ${t('serve')} <code>python3 -m http.server</code>) ${t('fetched')}<br><br>${esc(err.message)}</p>`;
+      }
     };
 
     const boot = async () => {
@@ -376,27 +409,30 @@
         next.searchParams.set('bench', sel.value);
         location.href = next.href;
       };
-      try {
-        render(await loadReport(current));
-      } catch (err) {
-        $('app').innerHTML = `<p class="status error">${t('unavailable')} <code>${esc(current)}</code>. ${t('serve')} <code>python3 -m http.server</code>) ${t('fetched')}<br><br>${esc(err.message)}</p>`;
-      }
+      await showReport(current);
     };
 
     const applyLanguage = (next) => {
       language = next;
       try { localStorage.setItem('threejs-bench-language', language); } catch { /* preference remains in memory */ }
       document.documentElement.lang = language === 'pt' ? 'pt-BR' : 'en';
+      const url = new URL(location.href);
+      url.searchParams.set('lang', language);
+      history.replaceState(null, '', url);
       document.querySelectorAll('[data-lang]').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.lang === language)));
       document.querySelector('.kicker + h1').textContent = language === 'pt' ? 'Placar' : 'Scorecard';
+      $('language-picker').setAttribute('aria-label', t('language'));
       document.querySelector('label .kicker').textContent = t('bench');
       $('bench').setAttribute('aria-label', t('selectBench'));
       $('footer-note').textContent = t('footer');
+      $('source').textContent = t('source');
       $('harness-docs').textContent = t('docs');
-      boot();
+      if (activeReport) render(activeReport);
+      else $('app').innerHTML = `<p class="status">${t('loading')}</p>`;
     };
     document.querySelectorAll('[data-lang]').forEach((button) => button.addEventListener('click', () => applyLanguage(button.dataset.lang)));
     applyLanguage(language);
+    boot();
   </script>
 </body>
 </html>
