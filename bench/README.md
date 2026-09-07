@@ -51,6 +51,9 @@ python3 -m http.server 8000
 
 On GitHub Pages: https://victorsodre.github.io/threejs-bench/bench/
 
+The harness requires Node.js 22.12 or later. `npm test` checks the local server's
+file and origin restrictions.
+
 `puppeteer-core` does not download a browser. The harness auto-detects Google
 Chrome / Chromium in the usual locations; override with:
 

@@ -8,6 +8,7 @@
     "threejs-bench": "./run.mjs"
   },
   "scripts": {
+    "test": "node --test test/*.test.mjs",
     "run": "node run.mjs",
     "judge": "node judge.mjs",
     "scorecard": "node scorecard.mjs",
@@ -15,9 +16,9 @@
   },
   "dependencies": {
     "pngjs": "^7.0.0",
-    "puppeteer-core": "^23.11.1"
+    "puppeteer-core": "25.10.0"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=22.12.0"
   }
 }

@@ -122,7 +122,7 @@ const main = async () => {
 
   const browser = await puppeteer.launch({
     executablePath,
-    headless: 'new',
+    headless: true,
     args: ['--no-sandbox', '--disable-dev-shm-usage', '--enable-webgl', '--ignore-gpu-blocklist'],
   });
 
