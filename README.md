@@ -6,11 +6,11 @@ This repository records browser-based 3D evaluations by [@ovictor](https://x.com
 
 ## Method
 
-The prompt is identical for every model ([PROMPT.md](./PROMPT.md)). Each run consists of a single response without follow-ups or regeneration. The output must be one HTML file using Three.js via CDN, with scene geometry expressed in code and procedural textures. Generation time and observed defects are recorded, while the returned file is preserved unchanged.
+The prompt is identical for every model ([original PT-BR prompt](./PROMPT.md); [English translation for readers](./PROMPT.en.md)). Each run consists of a single response without follow-ups or regeneration. The output must be one HTML file using Three.js via CDN, with scene geometry expressed in code and procedural textures. Generation time and observed defects are recorded, while the returned file is preserved unchanged.
 
 ## Bench 01 — Medieval village at golden hour
 
-Prompt: [PROMPT.md](./PROMPT.md). It is retained in its original PT-BR form as part of the experimental record.
+Prompt: [PROMPT.md](./PROMPT.md). It is retained in its original PT-BR form as part of the experimental record; [`PROMPT.en.md`](./PROMPT.en.md) is an explanatory translation and was not used for the recorded runs.
 
 | Model | Generation time | Live demo | Notes |
 |---|---|---|---|

@@ -2,11 +2,56 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>threejs-bench</title>
-  <meta http-equiv="refresh" content="0; url=bench/">
+  <title>threejs-bench — reproducible Three.js evaluations</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Reproducible evaluations of one-shot, AI-generated Three.js scenes.">
   <link rel="canonical" href="bench/">
+  <style>
+    :root { color-scheme: dark; font-family: ui-sans-serif, system-ui, sans-serif; background: #120f0c; color: #f4eadc; }
+    body { display: grid; place-items: center; min-height: 100vh; margin: 0; padding: 24px; }
+    main { width: min(620px, 100%); border: 1px solid #3a3229; background: #1b1612; padding: 32px; }
+    h1 { margin: 0 0 12px; font-family: Georgia, serif; font-weight: 500; }
+    p { color: #c4b49a; line-height: 1.6; }
+    a, button { color: #e3b56a; }
+    .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 24px; }
+    .open { border: 1px solid #e3b56a; padding: 9px 12px; text-decoration: none; }
+    .language { margin-left: auto; display: flex; gap: 6px; }
+    button { border: 1px solid #3a3229; background: transparent; padding: 6px 8px; cursor: pointer; }
+    button[aria-pressed="true"] { border-color: #e3b56a; }
+  </style>
 </head>
 <body>
-  <p><a href="bench/">Open the scorecard →</a></p>
+  <main>
+    <h1 id="title">threejs-bench</h1>
+    <p id="description">Reproducible evaluations of one-shot, AI-generated Three.js scenes. The published outputs and measurements remain available for inspection.</p>
+    <div class="actions">
+      <a class="open" id="open" href="bench/">Open the scorecard →</a>
+      <a id="readme" href="README.md">Read the method</a>
+      <div class="language" role="group" aria-label="Language">
+        <button type="button" data-lang="en" aria-pressed="true">English</button>
+        <button type="button" data-lang="pt" aria-pressed="false">Português (Brasil)</button>
+      </div>
+    </div>
+  </main>
+  <script>
+    const copy = {
+      en: { description: 'Reproducible evaluations of one-shot, AI-generated Three.js scenes. The published outputs and measurements remain available for inspection.', open: 'Open the scorecard →', method: 'Read the method' },
+      pt: { description: 'Avaliações reproduzíveis de cenas Three.js geradas por IA em uma tentativa. Os resultados publicados e as medições continuam disponíveis para inspeção.', open: 'Abrir o placar →', method: 'Ler o método' },
+    };
+    const initial = new URLSearchParams(location.search).get('lang');
+    let language = initial === 'pt' ? 'pt' : 'en';
+    const apply = (next) => {
+      language = next;
+      document.documentElement.lang = language === 'pt' ? 'pt-BR' : 'en';
+      document.title = language === 'pt' ? 'threejs-bench — avaliações reproduzíveis em Three.js' : 'threejs-bench — reproducible Three.js evaluations';
+      document.getElementById('description').textContent = copy[language].description;
+      document.getElementById('open').textContent = copy[language].open;
+      document.getElementById('open').href = `bench/?lang=${language}`;
+      document.getElementById('readme').textContent = copy[language].method;
+      document.querySelectorAll('[data-lang]').forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.lang === language)));
+    };
+    document.querySelectorAll('[data-lang]').forEach((button) => button.addEventListener('click', () => apply(button.dataset.lang)));
+    apply(language);
+  </script>
 </body>
 </html>
