@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "pngjs": "^7.0.0",
-    "puppeteer-core": "^23.11.1"
+    "puppeteer-core": "^25.10.0"
   },
   "engines": {
     "node": ">=18"
